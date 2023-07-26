@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@200&family=Chivo+Mono:ital,wght@1,100&display=swap');
-
+ @import url('https://fonts.googleapis.com/css2?family=Tektur:wght@500&display=swap');
 
 
 .navbar {
@@ -25,6 +25,7 @@
     animation-iteration-count: infinite;
     animation-duration: 4s;
     animation-delay: 3s;
+    
 }
 
 
@@ -55,12 +56,25 @@
     width: 800px;
     height: 100px;
     text-align: center;
-    padding: 10px;
+    padding: 15px;
     margin-top: 20px;
     font-size: 50px;
     font-family: cursive;
     font-weight: bold;
     border-radius: 10px;
+}
+
+.hora{
+    font-size: 40px;
+    width: 250px;
+    height: 60px;
+    background-color: #37373778;
+    color: #d0f865;
+    border-radius: 20px;
+    text-align: center;
+    margin: 10px;
+    padding: 5px;
+    font-family: 'Tektur', cursive;
 }
 
 /* FORMULARIO AGREGAR PRODUCTO - COMPRAR */
@@ -108,14 +122,6 @@
 .btnAgregar:hover{
     transform: scale(1.1);
     color: black;
-}
-
-.errorCampos{
-    color: #4e4e16;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 15px;
-    padding: 10px;
 }
 
 .card{
@@ -299,12 +305,36 @@ h1{
     height: 50px;
     margin:  auto;
     margin-bottom: 30px;
+    margin-top: 20px;
     text-align: center;
 }
 .btnTienda:hover{
     transform: scale(1.1);
 }
+.tiendaUbi{
+    display: flex;
+    
+}
 
+.ubicacion{
+    margin: 20px;
+    font-size: 40px;
+}
+.ubicacion:hover{
+    transform: scale(1.2);
+}
+
+
+.listaStock li{
+    background-color: #f3ff89;
+    color: #716962;
+    text-align: center;
+    width: 200px;
+    height: 70px;
+    border-radius: 15px;
+    margin: 15px;
+    padding: 5px;
+}
 
 .subtitulo {
     background-color: rgb(235, 209, 209);
@@ -379,6 +409,14 @@ footer {
     margin: 10px;
 }
 
+.redes-padre:hover{
+    transform: scale(1.2);
+}
+.redes:hover{
+    background-color: #131816;
+    border-radius: 5px;
+}
+
 .info-padre {
     display: flex;
     flex-direction: column;
@@ -400,20 +438,27 @@ footer {
 .volver-padre {
     margin: auto;
     background-color: #8f8f3e;
-    width: 150px;
+    width: 180px;
     margin-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px;
     border-radius: 10px;
 }
 
 .volver {
-    font-size: 20px;
+    font-size: 23px;
     margin-left: 20px;
     color: #616122;
     font-family: auto;
     text-decoration: none;
+    text-align: center;
 }
-
+.volver-padre:hover{
+    transform: scale(1.1);
+    background-color: rgb(201, 201, 58);
+}
+.volver:hover{
+    color: black;
+}
 
 
 

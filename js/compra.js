@@ -1,7 +1,5 @@
 let compraNuevo = "";
-let error = document.getElementById("error");
-error.className= " errorCampos";
-let fecha = new Date();
+const DateTime = luxon.DateTime;
 
 class Producto {
     constructor(flor, color, cantidad, id ) {
@@ -31,6 +29,20 @@ class Producto {
 
 
 }
+
+const horaActual = document.getElementById("horaActual");
+setInterval(() => {
+    const tiempo = new Date();
+    let hora = tiempo.getHours().toString().padStart(2,"0");
+    let minuto = tiempo.getMinutes().toString().padStart(2,"0");
+    let segundo = tiempo.getSeconds().toString().padStart(2,"0");
+
+    horaActual.innerHTML = `
+    ${hora}:${minuto}:${segundo}
+    `;
+
+})
+
 
 class ticketCompra{
     constructor(tienda, flor) {
@@ -85,6 +97,8 @@ class ticketCompra{
             this.eliminarCompra(flor.id);
              this.carritoCompra();
 
+     
+
             });
             
 
@@ -102,7 +116,7 @@ class ticketCompra{
             console.log(flor);
         })
 
-
+     
 
         const resumen = document.createElement("button");
         resumen.classList = "btnResumenCompra";
@@ -111,9 +125,7 @@ class ticketCompra{
             
         this.resumenCompra();
     });
-
          carritoDeCompra.appendChild(resumen);
-
 
                 
         const infoCompra = document.createElement("div");
@@ -138,45 +150,198 @@ class ticketCompra{
 
         
          if(flores.flor === "" || flores.color === "" || flores.cantidad === "") {
-            error.innerHTML = ` ! "Debes completar Todos los campos requeridos"  `;
+            Toastify({
+                text : "¡Debes completar TODOS los campos requeridos!",
+                duration : 5000,
+                gravity: "top",
+                position: "right",
+                style: {
+                    background: "#7D938A",
+                    color: "#fdca40",
+                    width:"300px",
+                    height:"80px",
+                    borderRadius: "15px",
+                    textAlign: "center",
+                    fontSize: "20px",
+                }
+            }).showToast();
             return;
         } 
 
-       
-        flores.id = Math.round(Math.random()*20);
-        this.flor.push(flores);
-        localStorage.setItem("compra", JSON.stringify(this));
-         document.getElementById("tipoDeFlor").value = "";
-         document.getElementById("colorDeFlor").value = "";
-         document.getElementById("cantidadDeFlores").value = "";
+        fetch("../json/data.json")
+        .then((response) => response.json())
+        .then((data) => {
+            const productoEncontrado = data.find(
+                (producto) => 
+                producto.flor.toLowerCase() === flores.flor.toLowerCase() &&
+                producto.color.toLowerCase() === flores.color.toLowerCase()
+            );
 
-         
+             if(productoEncontrado) {
+                flores.id = Math.round(Math.random()*20);
+                this.flor.push(flores);
+                localStorage.setItem("compra", JSON.stringify(this));
+                document.getElementById("tipoDeFlor").value = "";
+                document.getElementById("colorDeFlor").value = "";
+                document.getElementById("cantidadDeFlores").value = "";
+
+             } else{
+                Toastify({
+                    text: "No hay Stock del producto ingresado",
+                    duration: 5000,
+                    gravity: "top",
+                    position: "right",
+                    style: {
+                        background: "#7D938A",
+                        color: "#fdca40",
+                        width: "300px",
+                        height: "80px",
+                        borderRadius: "15px",
+                        textAlign: "center",
+                        fontSize: "20px",
+                    },
+                }).showToast();
+             }
+
+        })
+
+       .catch((error) => {
+        console.log("Error al realizar la consulta a la API:", error);
+       })
        
     } 
 
 
     eliminarCompra(tipoCompra){
-        this.flor = this.flor.filter(flor => flor.id !== tipoCompra);
-        localStorage.setItem("compra", JSON.stringify(this));
-        console.log(tipoCompra);
+        swal.fire({
+            title: "Eliminar Producto",
+            icon:"question",
+            iconColor: "#99582a",
+            text: "¿Seguro que deseea Eliminar este Producto?",
+            showCancelButton : true,
+            confirmButtonText:"ELIMINAR",
+            cancelButtonText:"CANCELAR",
+            confirmButtonColor: "#80b918",
+            cancelButtonColor:"#df2935",
+            padding: "15px",
+            width: "350px",
+            color:"#450920",
+            background: "#ffe45e",
+        }).then((result) => {
+            if(result.isConfirmed){
+                swal.fire({
+                    title: "Producto Eliminado",
+                    icon:"success",
+                    iconColor: "#020202",
+                    text:"El Producto fue Eliminado del Carrito",
+                    confirmButtonColor: "#020202",
+                    padding: "15px",
+                    width: "400px",
+                    color:"#343a40",
+                    background: "#16db65",
+                }) .then(() => {
+
+                        this.flor = this.flor.filter(flor => flor.id !== tipoCompra);
+                        localStorage.setItem("compra", JSON.stringify(this));
+                });
+
+                   
+            } else{
+                swal.fire({
+                    title: "Cancelado",
+                    icon:"error",
+                    iconColor: "#020202",
+                    text:"El Producto NO fue Eliminado del Carrito",
+                    confirmButtonColor: "#020202",
+                    padding: "15px",
+                    width: "400px",
+                    color:"#020202",
+                    background: "#bf0603",
+                })
+
+            }
+        })
+
+       
+    }
+
+    eliminarCarritoDeCompra(carrito){
+        swal.fire({
+            title: "Eliminar Carrito",
+            icon:"question",
+            iconColor: "#99582a",
+            text: "¿Seguro que deseea Eliminar todos los productos del Carrito?",
+            showCancelButton : true,
+            confirmButtonText:"ELIMINAR",
+            cancelButtonText:"CANCELAR",
+            confirmButtonColor: "#80b918",
+            cancelButtonColor:"#df2935",
+            padding: "15px",
+            width: "350px",
+            color:"#450920",
+            background: "#ffe45e",
+        }).then((result) => {
+            if(result.isConfirmed){
+                swal.fire({
+                    title: "Carrito Eliminado",
+                    icon:"success",
+                    iconColor: "#020202",
+                    text:"Tu Carrito de compra fue Eliminado",
+                    confirmButtonColor: "#020202",
+                    padding: "15px",
+                    width: "400px",
+                    color:"#343a40",
+                    background: "#16db65",
+                }) .then(() => {
+
+                    this.flor = [];
+                    localStorage.removeItem("compra");
+                    this.carritoCompra();                        
+                });
+
+                   
+            } else{
+                swal.fire({
+                    title: "Cancelado",
+                    icon:"error",
+                    iconColor: "#020202",
+                    text:"Tu Carrito de compra NO fue Eliminado",
+                    confirmButtonColor: "#020202",
+                    padding: "15px",
+                    width: "400px",
+                    color:"#020202",
+                    background: "#bf0603",
+                })
+
+            }
+        })
     }
     
     resumenCompra() {
         const precioTotal = this.calcularPrecioTotal();
-        const productosComprados = this.flor.map(flor => `${flor.flor} (${flor.color}): ${flor.cantidad}`);
-
-
-
-     infoCompra.innerHTML = `
-        <h3 class="prodComp">Productos comprados:</h3>
-        <ul>
-            ${productosComprados.map(producto => `<li class= "itemsResumen">${producto.toUpperCase()}</li>`).join("")}
-        </ul>
-        <h3 class= "totalResumen">Precio total: $ ${precioTotal}</h3>
+        const productosComprados = this.flor
+        .filter((flor) => flor.cantidad > 0)
+        .map((flor) => `${flor.flor} (${flor.color}): ${flor.cantidad}`)
+        
+        if(productosComprados.length  === 0) {
+            infoCompra.innerHTML = `
+            <h3 class="prodComp">No hay productos en el resumen de compra.</h3>
         `;
 
+        } else{
+
+        infoCompra.innerHTML = `
+                <h3 class="prodComp">Productos comprados:</h3>
+                <ul>
+                    ${productosComprados.map(producto => `<li class= "itemsResumen">${producto.toUpperCase()}</li>`).join("")}
+                </ul>
+                <h3 class= "totalResumen">Precio total: $ ${precioTotal}</h3>
+                `;
+        }
+    
+
       
-      }
+    }
 
     calcularPrecioTotal() {
         let total = 0;
@@ -187,10 +352,61 @@ class ticketCompra{
       }
 
       finalizarCompra() {
-        this.flor = [];
-        localStorage.removeItem("compra");
-        location.reload();
-        alert(`¡MUCHAS GRACIAS POR SU COMPRA! ❤️ \n En la fecha: ${fecha}`);
+        const fecha = DateTime.now();
+        swal.fire({
+            title: "¿Seguro que quieres Finalizar la Compra?",
+            icon:"question",
+            iconColor: "#99582a",
+            showCancelButton : true,
+            confirmButtonText:"FINALIZAR",
+            cancelButtonText:"CANCELAR",
+            confirmButtonColor: "#80b918",
+            cancelButtonColor:"#df2935",
+            padding: "15px",
+            width: "350px",
+            color:"#450920",
+            background: "#ffe45e",
+
+        }) .then((result) => {
+            if(result.isConfirmed){
+
+                swal.fire({
+                    title: "Compra Finalizada",
+                    icon: "success",
+                    iconColor: "#020202",
+                    text: `¡MUCHAS GRACIAS POR SU COMPRA! ❤️ \n  ${fecha.toLocaleString(DateTime.DATE_FULL)}`,
+                    timer: 15000,
+                    confirmButtonText: "Aceptar",
+                    confirmButtonColor: "#020202",
+                    padding: "15px",
+                    width: "400px",
+                    color:"#343a40",
+                    background: "#16db65",
+
+                }).then(() => {
+                    this.flor = [];
+                    localStorage.removeItem("compra");
+                    location.reload();
+                });
+
+               
+                
+            } else{
+                swal.fire({
+                    title: " Compra Cancelada",
+                    icon: "error",
+                    iconColor: "#020202",
+                    text: "No se Realizo la Compra",
+                    confirmButtonColor: "#020202",
+                    padding: "15px",
+                    width: "400px",
+                    color:"#020202",
+                    background: "#bf0603",
+                })
+            }
+        })
+
+      
       }
     
 }
@@ -267,6 +483,15 @@ const iniciar = () => {
         compraNuevo = new ticketCompra("Flowers´Naturals",[]);
         localStorage.setItem("compra", JSON.stringify(compraNuevo));
     }
+
+    const btnEliminarCarrito = document.getElementById("btnEliminarCarrito");
+    btnEliminarCarrito.addEventListener("click", () => {
+        compraNuevo.eliminarCarritoDeCompra();
+        compraNuevo.carritoCompra();
+    });
+    document.getElementById("navbarNav").appendChild(btnEliminarCarrito);
+
+
 const agregar = new Agregar("nuevo");
 agregar.crearFormulario();
 }
