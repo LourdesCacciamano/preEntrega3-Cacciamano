@@ -6,7 +6,7 @@ class Producto {
         this.flor = flor;
         this.color = color;
         this.cantidad = cantidad;
-       this.id = id;
+        this.id = id;
         this.precio = this.obtenerPrecio();
      
     }
@@ -23,11 +23,7 @@ class Producto {
         } else{
             return 0;
         }
-
-       
     }
-
-
 }
 
 const horaActual = document.getElementById("horaActual");
@@ -40,7 +36,6 @@ setInterval(() => {
     horaActual.innerHTML = `
     ${hora}:${minuto}:${segundo}
     `;
-
 })
 
 
@@ -54,11 +49,11 @@ class ticketCompra{
     carritoCompra(){
 
         const carritoDeCompra = document.getElementById("carritoDeCompra");
-        carritoDeCompra.classList = "row row-cols-md-2";
+        carritoDeCompra.classList = "row row-cols-md-2 ";
         carritoDeCompra.innerHTML = "";
 
         const contenedorFinalizarCompra = document.createElement("div");
-        contenedorFinalizarCompra.classList = "row row-cols-md-2";
+        contenedorFinalizarCompra.classList = "row row-cols-md-2 ";
         
 
         this.flor.map(flor => {
@@ -66,7 +61,7 @@ class ticketCompra{
             columnas.classList = "col";
 
             const div = document.createElement("div");
-            div.classList = "card";
+            div.classList = "card animate__animated animate__flipInY";
 
             const principal = document.createElement("h4");
             principal.innerHTML = `${flor.flor.toUpperCase()} -> ${flor.color}`;
@@ -96,9 +91,6 @@ class ticketCompra{
             eliminar.addEventListener("click", () => {
             this.eliminarCompra(flor.id);
              this.carritoCompra();
-
-     
-
             });
             
 
@@ -117,14 +109,12 @@ class ticketCompra{
         })
 
      
-
         const resumen = document.createElement("button");
         resumen.classList = "btnResumenCompra";
         resumen.innerHTML = "Resumen de la Compra";
         resumen.addEventListener("click", () => {
-            
         this.resumenCompra();
-    });
+        });
          carritoDeCompra.appendChild(resumen);
 
                 
@@ -143,12 +133,9 @@ class ticketCompra{
 
         carritoDeCompra.appendChild(finalizar);
      
-
     }
 
     agregarCompra(flores) {
-
-        
          if(flores.flor === "" || flores.color === "" || flores.cantidad === "") {
             Toastify({
                 text : "¡Debes completar TODOS los campos requeridos!",
@@ -185,6 +172,8 @@ class ticketCompra{
                 document.getElementById("colorDeFlor").value = "";
                 document.getElementById("cantidadDeFlores").value = "";
 
+                this.carritoCompra();
+
              } else{
                 Toastify({
                     text: "No hay Stock del producto ingresado",
@@ -201,6 +190,10 @@ class ticketCompra{
                         fontSize: "20px",
                     },
                 }).showToast();
+
+                document.getElementById("tipoDeFlor").value = "";
+                document.getElementById("colorDeFlor").value = "";
+                document.getElementById("cantidadDeFlores").value = "";
              }
 
         })
@@ -208,7 +201,6 @@ class ticketCompra{
        .catch((error) => {
         console.log("Error al realizar la consulta a la API:", error);
        })
-       
     } 
 
 
@@ -240,9 +232,9 @@ class ticketCompra{
                     color:"#343a40",
                     background: "#16db65",
                 }) .then(() => {
-
                         this.flor = this.flor.filter(flor => flor.id !== tipoCompra);
                         localStorage.setItem("compra", JSON.stringify(this));
+                        this.carritoCompra();
                 });
 
                    
@@ -262,10 +254,9 @@ class ticketCompra{
             }
         })
 
-       
     }
 
-    eliminarCarritoDeCompra(carrito){
+    eliminarCarritoDeCompra(){
         swal.fire({
             title: "Eliminar Carrito",
             icon:"question",
@@ -363,7 +354,7 @@ class ticketCompra{
             confirmButtonColor: "#80b918",
             cancelButtonColor:"#df2935",
             padding: "15px",
-            width: "350px",
+            width: "400px",
             color:"#450920",
             background: "#ffe45e",
 
@@ -405,10 +396,8 @@ class ticketCompra{
                 })
             }
         })
-
       
       }
-    
 }
 
 
@@ -454,19 +443,20 @@ class Agregar{
           formularioFlor.appendChild(cantidadFlor);
           formularioFlor.appendChild(btnAgregarFlor);
          
-            document.getElementById("agregarForm").appendChild(formularioFlor);
+         document.getElementById("agregarForm").appendChild(formularioFlor);
 
             formularioFlor.addEventListener("submit", (e) => {
                 e.preventDefault();
-                const tipoDeFlor = document.getElementById("tipoDeFlor").value;
-                const colorDeFlor = document.getElementById("colorDeFlor").value;
-               const cantidadDeFlores = document.getElementById("cantidadDeFlores").value;
-               const flores = new Producto(tipoDeFlor, colorDeFlor, cantidadDeFlores);
+            const tipoDeFlor = document.getElementById("tipoDeFlor").value;
+            const colorDeFlor = document.getElementById("colorDeFlor").value;
+            const cantidadDeFlores = document.getElementById("cantidadDeFlores").value;
+            const flores = new Producto(tipoDeFlor, colorDeFlor, cantidadDeFlores);
                compraNuevo.agregarCompra(flores);
                compraNuevo.carritoCompra();
 
             });
                 break;
+                
             default:
                 break;
         }
