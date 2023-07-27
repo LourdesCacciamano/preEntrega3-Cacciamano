@@ -1,0 +1,20 @@
+[
+    {
+        "flor" : "ROSA:",
+        "color1" : " • Rojo",
+        "color2" : "• Blanco",
+        "color3" : "• Rosa"
+    },
+    {
+        "flor" : "ALSTROEMERIA:",
+        "color1" : "• Rojo",
+        "color2" : "• Blanco",
+        "color3" : "• Amarillo"
+    },
+    {
+        "flor" : "GERBERA:",
+        "color1" : "• Rojo",
+        "color2" : "• Violeta",
+        "color3" : "• Naranja"
+    }
+]

@@ -161,7 +161,7 @@ class ticketCompra{
             const productoEncontrado = data.find(
                 (producto) => 
                 producto.flor.toLowerCase() === flores.flor.toLowerCase() &&
-                producto.color.toLowerCase() === flores.color.toLowerCase()
+                producto.color.toLowerCase() === flores.color.toLowerCase() 
             );
 
              if(productoEncontrado) {

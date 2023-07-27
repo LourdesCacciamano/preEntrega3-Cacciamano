@@ -54,17 +54,20 @@ const listadoDeStock = document.getElementById("listadoDeStock");
 
 let stockActual = document.getElementById("stockActual");
 stockActual.addEventListener("click", () => {
-    fetch("./json/data.json")
+    fetch("./json/dataStock.json")
         .then((res) => res.json())
         .then((data) => {
             data.forEach((producto) => {
                 const li = document.createElement("li");
                 li.innerHTML = `
-                <h4>${producto.flor}</h4>
-                <h6>${producto.color}</h6>
+                <h4 class= "dataFlor">${producto.flor}</h4>
+                <h6>${producto.color1}</h6>
+                <h6>${producto.color2}</h6>
+                <h6>${producto.color3}</h6>
                 <hr/>
             `;
                 listadoDeStock.appendChild(li)
+
             })
         })
 })
